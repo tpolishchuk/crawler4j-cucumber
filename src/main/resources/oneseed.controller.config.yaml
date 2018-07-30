@@ -1,0 +1,11 @@
+# Crawl controller configuration for 1 seed
+# Please, put directory path ended with /
+seed_url: http://demoqa.com/
+crawler_storage_directory: tmp/
+crawler_report_directory: tmp/reports/
+number_of_crawlers: 5
+politeness_delay: 500
+max_depth_of_crawling: 5
+seed_success_report_file: demoqa_working_urls.log
+seed_error_report_file: demoqa_error_urls.log
+excluded_urls_pattern: .*\\.(bmp|gif|jpg|png)$

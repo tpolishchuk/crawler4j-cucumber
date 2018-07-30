@@ -1,0 +1,26 @@
+# Default crawl controller configuration for multiple seeds
+# Configuration in 'seeds' section overrides common configuration for particular seed
+# Each seed url MUST HAVE its own crawler_storage_directory and crawler_report_directory
+# Please, put directory path ended with /
+
+#Common configuration
+politeness_delay: 1000
+
+#Seeds configuration
+seeds:
+  - seed_url: http://demoqa.com/
+    crawler_storage_directory: tmp/demoqa/
+    crawler_report_directory: tmp/demoqa/reports/
+    seed_success_report_file: demoqa_working_urls.log
+    seed_error_report_file: demoqa_error_urls.log
+    excluded_urls_pattern: .*\\.(bmp|gif|jpg|png)$
+    number_of_crawlers: 5
+    max_depth_of_crawling: 5
+
+  - seed_url: http://the-internet.herokuapp.com/
+    crawler_storage_directory: tmp/herokuapp/
+    crawler_report_directory: tmp/herokuapp/reports/
+    seed_success_report_file: herokuapp_working_urls.log
+    seed_error_report_file: herokuapp_error_urls.log
+    number_of_crawlers: 2
+    max_depth_of_crawling: 5
