@@ -11,6 +11,8 @@ import org.lrp.dtos.config.ControllerConfig;
 import org.lrp.exceptions.CrawlingException;
 import org.lrp.factories.CrawlerFactory;
 import org.lrp.helpers.common.FileHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -103,12 +105,25 @@ public class OneSeedCrawlController {
     }
 
     public void crawl() {
+        crawl(false);
+    }
+
+    public void crawl(boolean printFailureReport) {
         Integer numberOfCrawlers = controllerConfig.getParameter(seedUrl, "number_of_crawlers", Integer.class, true);
         CrawlerFactory crawlerFactory = new CrawlerFactory(seedUrl, controllerConfig);
         crawlController.startNonBlocking(crawlerFactory, numberOfCrawlers);
         crawlController.waitUntilFinish();
         mergeSuccessReportsFromCrawlers();
         mergeErrorReportsFromCrawlers();
+
+        if(printFailureReport){
+            String failureReportName = controllerConfig.getParameter(seedUrl, "seed_error_report_file", String.class, true);
+            File failureReport = new File(crawlerReportDirectory + failureReportName);
+            String failureReportContent = FileHelper.getFileContent(failureReport);
+
+            Logger logger = LoggerFactory.getLogger("[Crawler report]");
+            logger.error("\nFailure report for seed {}:\n{}\n", seedUrl, failureReportContent);
+        }
     }
 
     private void mergeSuccessReportsFromCrawlers() {

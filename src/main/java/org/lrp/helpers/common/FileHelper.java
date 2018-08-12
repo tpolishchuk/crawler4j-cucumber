@@ -5,6 +5,8 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.util.stream.Stream;
 
 public class FileHelper {
 
@@ -60,5 +62,23 @@ public class FileHelper {
 
     public static void appendRowToFile(File file, String data) {
         appendStringToFile(file, data + "\n");
+    }
+
+    public static String getFileContent(File file) {
+        try {
+            return FileUtils.readFileToString(file, Charset.defaultCharset());
+        } catch (IOException e) {
+            throw new IllegalStateException(String.format("Cannot get content of file %s:\n%s",
+                                                          file.getAbsolutePath(), e.getMessage()));
+        }
+    }
+
+    public static long getLinesAmount(File file) {
+        try (Stream<String> lines = Files.lines(file.toPath())) {
+            return lines.count();
+        } catch (IOException e) {
+            throw new IllegalStateException(String.format("Cannot get content of file %s:\n%s",
+                                                          file.getAbsolutePath(), e.getMessage()));
+        }
     }
 }

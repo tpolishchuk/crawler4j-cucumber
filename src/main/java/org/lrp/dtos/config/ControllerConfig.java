@@ -59,19 +59,19 @@ public class ControllerConfig extends AbstractDTO {
         this.crawlerReportDirectory = crawlerReportDirectory;
     }
 
-    public int getNumberOfCrawlers() {
+    public Integer getNumberOfCrawlers() {
         return numberOfCrawlers;
     }
 
-    public void setNumberOfCrawlers(int numberOfCrawlers) {
+    public void setNumberOfCrawlers(Integer numberOfCrawlers) {
         this.numberOfCrawlers = numberOfCrawlers;
     }
 
-    public int getPolitenessDelay() {
+    public Integer getPolitenessDelay() {
         return politenessDelay;
     }
 
-    public void setPolitenessDelay(int politenessDelay) {
+    public void setPolitenessDelay(Integer politenessDelay) {
         this.politenessDelay = politenessDelay;
     }
 
@@ -83,11 +83,11 @@ public class ControllerConfig extends AbstractDTO {
         this.seedUrl = seedUrl;
     }
 
-    public int getMaxDepthOfCrawling() {
+    public Integer getMaxDepthOfCrawling() {
         return maxDepthOfCrawling;
     }
 
-    public void setMaxDepthOfCrawling(int maxDepthOfCrawling) {
+    public void setMaxDepthOfCrawling(Integer maxDepthOfCrawling) {
         this.maxDepthOfCrawling = maxDepthOfCrawling;
     }
 
@@ -167,7 +167,6 @@ public class ControllerConfig extends AbstractDTO {
      * If seed controller configuration is absent or has no such parameter
      * Then parent controller config parameter is returned
      */
-
     public <T> T getParameter(String seedUrl, String parameterFieldOrJsonAlias, Class<T> clazz, boolean isMandatory) {
         ControllerConfig seedControllerConfig = getSeedConfigBySeedUrl(seedUrl);
         T result;
@@ -197,7 +196,7 @@ public class ControllerConfig extends AbstractDTO {
      * @param clazz                     class of a desired result object
      * @return parameter as defined clazz
      */
-    public <T> T getParameter(ControllerConfig controllerConfig, String parameterFieldOrJsonAlias, Class<T> clazz) {
+    private <T> T getParameter(ControllerConfig controllerConfig, String parameterFieldOrJsonAlias, Class<T> clazz) {
         for (Field field : controllerConfig.getClass().getDeclaredFields()) {
             field.setAccessible(true);
             String fieldName = field.getName();
@@ -207,7 +206,8 @@ public class ControllerConfig extends AbstractDTO {
                 try {
                     return (T) field.get(controllerConfig);
                 } catch (IllegalAccessException e) {
-                    e.printStackTrace();
+                    throw new IllegalStateException("Cannot access field " + field.getName()
+                                                    + ". Caught an exception: " + e.getStackTrace());
                 }
             }
         }

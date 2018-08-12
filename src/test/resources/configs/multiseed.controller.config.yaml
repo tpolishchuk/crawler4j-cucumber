@@ -5,6 +5,7 @@
 
 #Common configuration
 politeness_delay: 1000
+max_depth_of_crawling: 10
 
 #Seeds configuration
 seeds:
